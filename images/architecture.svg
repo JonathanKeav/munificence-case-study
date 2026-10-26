@@ -1,0 +1,158 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" width="1200" height="640" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <title>Munificence architecture</title>
+  <desc>Web browsers and the mobile app connect to one ASP.NET Core app on DigitalOcean. Stripe and Mailgun call in through webhooks. The app's service layer uses PostgreSQL and external services.</desc>
+  <style>
+    .bg { fill: #ffffff; }
+    .ink { fill: #1f1b2d; }
+    .muted { fill: #5e5a6e; }
+    .eyebrow { fill: #7a7590; font-size: 11px; font-weight: 600; letter-spacing: 1.2px; }
+    .box { fill: #ffffff; stroke: #d9d4e8; stroke-width: 1.25; }
+    .accent { fill: #f4f0fd; stroke: #5b32c1; stroke-width: 1.5; }
+    .container { fill: #faf8fe; stroke: #c9bfe8; stroke-width: 1.25; stroke-dasharray: 6 5; }
+    .group { fill: #fbfbfd; stroke: #d9d4e8; stroke-width: 1.25; }
+    .accent-ink { fill: #5b32c1; }
+    .rule { stroke: #d9d4e8; stroke-width: 1; }
+    .arrow { stroke: #8a84a0; stroke-width: 1.5; fill: none; }
+    .head { fill: #8a84a0; }
+    .pill { fill: #fff4e0; stroke: #e8b45c; stroke-width: 1; }
+    .pill-ink { fill: #8a5a00; font-size: 10px; font-weight: 600; }
+    .t { font-size: 15px; font-weight: 600; }
+    .s { font-size: 12.5px; }
+    .r { font-size: 13px; font-weight: 600; }
+    .rs { font-size: 12px; }
+    .lbl { font-size: 11px; }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #0d1117; }
+      .ink { fill: #e6edf3; }
+      .muted { fill: #9ba3af; }
+      .eyebrow { fill: #8b8fa3; }
+      .box { fill: #161b22; stroke: #30363d; }
+      .accent { fill: #1e1736; stroke: #a78bfa; }
+      .container { fill: #110f1a; stroke: #4c3f78; }
+      .group { fill: #12161d; stroke: #30363d; }
+      .accent-ink { fill: #c4b5fd; }
+      .rule { stroke: #30363d; }
+      .arrow { stroke: #6e7681; }
+      .head { fill: #6e7681; }
+      .pill { fill: #2b2111; stroke: #9a6b1f; }
+      .pill-ink { fill: #f0c36b; }
+    }
+  </style>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path class="head" d="M0,0 L10,5 L0,10 z"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1200" height="640" rx="16"/>
+
+  <!-- Column headings -->
+  <text class="eyebrow" x="40" y="44">WHO CALLS IN</text>
+  <text class="eyebrow" x="320" y="44">APPLICATION</text>
+  <text class="eyebrow" x="920" y="44">DATA AND SERVICES</text>
+
+  <!-- Clients -->
+  <rect class="box" x="40" y="110" width="220" height="96" rx="10"/>
+  <text class="ink t" x="58" y="148">Web browser</text>
+  <text class="muted s" x="58" y="172">Admins and members</text>
+
+  <rect class="box" x="40" y="236" width="220" height="96" rx="10"/>
+  <text class="ink t" x="58" y="274">Mobile app</text>
+  <text class="muted s" x="58" y="298">.NET MAUI · iOS and Android</text>
+
+  <rect class="box" x="40" y="362" width="220" height="42" rx="10"/>
+  <text class="ink r" x="58" y="388">Stripe</text>
+  <text class="muted rs" x="112" y="388">billing events</text>
+
+  <rect class="box" x="40" y="416" width="220" height="42" rx="10"/>
+  <text class="ink r" x="58" y="442">Mailgun</text>
+  <text class="muted rs" x="120" y="442">forwarded receipts</text>
+  <rect class="pill" x="222" y="429" width="30" height="16" rx="8"/>
+  <text class="pill-ink" x="237" y="441" text-anchor="middle">soon</text>
+
+  <!-- Application container -->
+  <rect class="container" x="320" y="64" width="540" height="540" rx="14"/>
+  <text class="muted lbl" x="340" y="90">ASP.NET Core 9 · one Docker container on DigitalOcean App Platform</text>
+
+  <rect class="box" x="350" y="110" width="220" height="96" rx="10"/>
+  <text class="ink t" x="368" y="140">Blazor Server UI</text>
+  <text class="muted s" x="368" y="164">Interactive server rendering</text>
+  <text class="muted s" x="368" y="184">ASP.NET Identity cookies</text>
+
+  <rect class="box" x="350" y="236" width="220" height="96" rx="10"/>
+  <text class="ink t" x="368" y="266">REST API</text>
+  <text class="muted s" x="368" y="290">ASP.NET Core controllers</text>
+  <text class="muted s" x="368" y="310">JWT access + refresh tokens</text>
+
+  <rect class="box" x="350" y="362" width="220" height="96" rx="10"/>
+  <text class="ink t" x="368" y="392">Webhook endpoints</text>
+  <text class="muted s" x="368" y="416">Stripe signature check</text>
+  <text class="muted s" x="368" y="436">Mailgun HMAC + rate limit</text>
+
+  <rect class="accent" x="610" y="110" width="220" height="348" rx="10"/>
+  <text class="accent-ink t" x="628" y="140">Service layer</text>
+  <line class="rule" x1="628" y1="156" x2="812" y2="156"/>
+  <text class="ink s" x="628" y="186">Tenant scope from the token</text>
+  <text class="ink s" x="628" y="220">Expense approval workflow</text>
+  <text class="ink s" x="628" y="254">Append-only audit log</text>
+  <text class="ink s" x="628" y="288">Quotas and plan limits</text>
+  <text class="ink s" x="628" y="322">Concurrency checks (xmin)</text>
+  <text class="ink s" x="628" y="356">AI receipt scanning</text>
+  <line class="rule" x1="628" y1="392" x2="812" y2="392"/>
+  <text class="muted s" x="628" y="422">EF Core 9 · Npgsql</text>
+
+  <rect class="box" x="350" y="496" width="480" height="80" rx="10"/>
+  <text class="ink t" x="368" y="528">Background workers</text>
+  <text class="muted s" x="368" y="552">Scan forwarded receipts · Send product telemetry in batches</text>
+
+  <!-- Data and services -->
+  <rect class="accent" x="920" y="110" width="240" height="96" rx="10"/>
+  <text class="accent-ink t" x="938" y="140">PostgreSQL 17</text>
+  <text class="muted s" x="938" y="164">Organisations, expenses, users</text>
+  <text class="muted s" x="938" y="184">Audit log, Data Protection keys</text>
+
+  <rect class="group" x="920" y="236" width="240" height="368" rx="12"/>
+  <text class="ink t" x="938" y="262">External services</text>
+
+  <rect class="box" x="936" y="276" width="208" height="46" rx="8"/>
+  <text class="ink r" x="950" y="295">OpenAI Vision</text>
+  <text class="muted rs" x="950" y="312">Reads receipt details</text>
+
+  <rect class="box" x="936" y="330" width="208" height="46" rx="8"/>
+  <text class="ink r" x="950" y="349">DigitalOcean Spaces</text>
+  <text class="muted rs" x="950" y="366">Stores receipt images</text>
+
+  <rect class="box" x="936" y="384" width="208" height="46" rx="8"/>
+  <text class="ink r" x="950" y="403">Stripe</text>
+  <text class="muted rs" x="950" y="420">Checkout and subscriptions</text>
+
+  <rect class="box" x="936" y="438" width="208" height="46" rx="8"/>
+  <text class="ink r" x="950" y="457">Mailgun</text>
+  <text class="muted rs" x="950" y="474">Transactional email</text>
+
+  <rect class="box" x="936" y="492" width="208" height="46" rx="8"/>
+  <text class="ink r" x="950" y="511">Sentry</text>
+  <text class="muted rs" x="950" y="528">Errors from web and mobile</text>
+
+  <rect class="box" x="936" y="546" width="208" height="46" rx="8"/>
+  <text class="ink r" x="950" y="565">Pwned Passwords</text>
+  <text class="muted rs" x="950" y="582">Leaked-password check</text>
+
+  <!-- Arrows: callers to entry points -->
+  <line class="arrow" x1="262" y1="158" x2="346" y2="158" marker-end="url(#ah)"/>
+  <text class="muted lbl" x="304" y="150" text-anchor="middle">SignalR</text>
+  <line class="arrow" x1="262" y1="284" x2="346" y2="284" marker-end="url(#ah)"/>
+  <text class="muted lbl" x="304" y="276" text-anchor="middle">HTTPS · JWT</text>
+  <line class="arrow" x1="262" y1="383" x2="346" y2="397" marker-end="url(#ah)"/>
+  <line class="arrow" x1="262" y1="437" x2="346" y2="423" marker-end="url(#ah)"/>
+
+  <!-- Arrows: entry points to services -->
+  <line class="arrow" x1="572" y1="158" x2="606" y2="158" marker-end="url(#ah)"/>
+  <line class="arrow" x1="572" y1="284" x2="606" y2="284" marker-end="url(#ah)"/>
+  <line class="arrow" x1="572" y1="410" x2="606" y2="410" marker-end="url(#ah)"/>
+  <line class="arrow" x1="720" y1="494" x2="720" y2="462" marker-end="url(#ah)"/>
+
+  <!-- Arrows: services to data -->
+  <line class="arrow" x1="832" y1="158" x2="916" y2="158" marker-end="url(#ah)"/>
+  <line class="arrow" x1="832" y1="284" x2="916" y2="284" marker-end="url(#ah)"/>
+</svg>
