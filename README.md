@@ -116,31 +116,33 @@ A few months into the project, AI coding tools got good enough to help. I starte
 
 **2. Make the documentation keep itself current.** Documentation that describes last quarter's app is worse than none, because the AI trusts it. A checked-in skill compares the documentation with the code and fixes the gaps. It's run after a .NET upgrade, a new package, a new module or an architecture change.
 
-**3. Keep a written plan the AI can update.** A living `PLAN.md` holds the current state, sprint items, who does what and what's been verified. A long session can hand over to a fresh one with that file and nothing else, which beats trying to make one conversation remember everything.
+**3. A rule in a document is a suggestion. A test that fails the build is a rule.** `architecture.md` said the web UI and the mobile API share one service layer, and the code drifted anyway. Receipt storage ended up written three times, once each for the web form, the mobile API and forwarded email. When I fixed photos keeping their GPS location, the fix reached the app and email but not the web form. It only came to light because I asked whether the fix applied to every way a receipt comes in. The AI hadn't flagged it, partly because of my own instructions: "match the surrounding code" told it to copy the pages that already went straight to the database. The rule now lives in three places. The architecture doc states it. The `/code-review` checklist treats a break as a failure, even where neighbouring code does the same. And guard tests fail the build when a page or controller reaches for the database, file storage, the AI service or the image library. Pages that already broke the rule sit on an allowlist that can only shrink, because the test also fails when an entry is no longer needed.
+
+**4. Keep a written plan the AI can update.** A living `PLAN.md` holds the current state, sprint items, who does what and what's been verified. A long session can hand over to a fresh one with that file and nothing else, which beats trying to make one conversation remember everything.
 
 ### AI writes, AI reviews, then I review
 
-**4. Turn reviews into skills, then experiment with them.** Code review, security review, new endpoint, new test, commit, PR, and "run it locally and click through it" are each a checked-in skill. A review uses the same checklist every time, not whatever I remember to ask for. That's how the cross-tenant scan bug, which had been there for months, got caught. I compare reviews of the same change with no skill and with different versions of a skill, see what each one catches, and fold that back into the skill.
+**5. Turn reviews into skills, then experiment with them.** Code review, security review, new endpoint, new test, commit, PR, and "run it locally and click through it" are each a checked-in skill. A review uses the same checklist every time, not whatever I remember to ask for. That's how the cross-tenant scan bug, which had been there for months, got caught. I compare reviews of the same change with no skill and with different versions of a skill, see what each one catches, and fold that back into the skill.
 
-**5. Test your skills, because models change.** A review skill that worked well two months ago may not work as well on today's model. Running skills against a fixed set of changes with known problems shows whether they still catch them.
+**6. Test your skills, because models change.** A review skill that worked well two months ago may not work as well on today's model. Running skills against a fixed set of changes with known problems shows whether they still catch them.
 
-**6. Match the depth of review to the risk.** A change backed by unit tests, integration tests and end-to-end tests of real user journeys can get a quick AI review. Security-sensitive or business-critical code gets a deep, risk-based review: I work out what the change is meant to do and dig into the code myself.
+**7. Match the depth of review to the risk.** A change backed by unit tests, integration tests and end-to-end tests of real user journeys can get a quick AI review. Security-sensitive or business-critical code gets a deep, risk-based review: I work out what the change is meant to do and dig into the code myself.
 
-**7. Make everything verifiable.** Two questions matter. Can I verify that the feature does what it's meant to? And can I verify every claim the AI's review makes? When a claim can't be checked, I push the AI until it can, or I drop it.
+**8. Make everything verifiable.** Two questions matter. Can I verify that the feature does what it's meant to? And can I verify every claim the AI's review makes? When a claim can't be checked, I push the AI until it can, or I drop it.
 
 ### Tests and proof
 
-**8. Make the AI question its own tests.** AI-written tests can pass without proving anything. I ask the AI: are these tests valid, are the mocks bypassing the logic they're supposed to test, and is the coverage broad enough? Then I put those questions into skills. Integration tests that feed real data through the whole stack matter most. That's why the suite runs against a real Postgres database rather than a fake.
+**9. Make the AI question its own tests.** AI-written tests can pass without proving anything. I ask the AI: are these tests valid, are the mocks bypassing the logic they're supposed to test, and is the coverage broad enough? Then I put those questions into skills. Integration tests that feed real data through the whole stack matter most. That's why the suite runs against a real Postgres database rather than a fake.
 
-**9. "Done" means it runs in front of you.** The model is confident whether or not it's right. A change isn't done until someone has seen it work: a real-database test, a click-through in the browser, a check on a real phone. "Fixed and checked on the phone, three launches" became the bar.
+**10. "Done" means it runs in front of you.** The model is confident whether or not it's right. A change isn't done until someone has seen it work: a real-database test, a click-through in the browser, a check on a real phone. "Fixed and checked on the phone, three launches" became the bar.
 
 ### Ownership
 
-**10. Ask for the why in commit messages.** The AI-assisted commits explain the cause, not just the change. The concurrency fix's message is effectively a postmortem. Months later, that's the most valuable thing in the history.
+**11. Ask for the why in commit messages.** The AI-assisted commits explain the cause, not just the change. The concurrency fix's message is effectively a postmortem. Months later, that's the most valuable thing in the history.
 
-**11. AI makes bad merges at AI speed.** In May 2026 an AI-generated branch was merged, reverted and re-merged until changes were silently lost, and I had to rebuild them by hand from the history. Since then: one branch per task, small PRs, and I review every merge into `develop`.
+**12. AI makes bad merges at AI speed.** In May 2026 an AI-generated branch was merged, reverted and re-merged until changes were silently lost, and I had to rebuild them by hand from the history. Since then: one branch per task, small PRs, and I review every merge into `develop`.
 
-**12. You still own the decisions.** Security sign-offs, anything that touches production, rotating credentials and store releases stay with me. The AI writes the checklist and does the legwork, but it doesn't get to tick the boxes that matter.
+**13. You still own the decisions.** Security sign-offs, anything that touches production, rotating credentials and store releases stay with me. The AI writes the checklist and does the legwork, but it doesn't get to tick the boxes that matter.
 
 ---
 
