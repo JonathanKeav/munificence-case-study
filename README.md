@@ -44,7 +44,7 @@ Turning a side project into a SaaS took far more than the product itself. It nee
 ![Munificence architecture: web browsers, the mobile app, and Stripe and Mailgun webhooks call one ASP.NET Core app, whose service layer uses PostgreSQL and external services](images/architecture.svg)
 
 - **One deployable.** A single ASP.NET Core app serves the Blazor Server UI, the REST API, the webhooks and the background workers, in one Docker container.
-- **The web UI and the API share one service layer.** Blazor Server components call the services directly in the same process. The mobile app reaches the same services through the REST API. Business rules live in one place, whichever way a request comes in.
+- **The web UI and the API share one service layer.** Blazor Server components call the services directly in the same process, and the mobile app reaches the same services through the REST API. Business rules belong in those services, whichever way a request comes in. In practice some had drifted into pages and controllers (lesson 3), so guard tests now fail the build when one reaches past the services.
 - A **shared library** (`munificence.Shared`) holds the DTOs used by both the server and the mobile app, so the two agree on the API's types.
 - **Tenant isolation** happens at the service layer. Every query is filtered by the `OrganizationId` claim from the caller's token, never by an ID the client sends.
 - **Two auth models.** The web app uses ASP.NET Identity cookies, and the mobile app uses JWT access tokens with server-revocable refresh tokens.
@@ -82,7 +82,7 @@ Receipts by email, which is about to launch, needs a webhook that accepts mail f
 - It fails closed: if no signing key is configured, the endpoint returns 404.
 - Rate limiting runs per client IP, before the body is read.
 - Every request must carry a valid HMAC-SHA256 signature, with replay protection.
-- The secret is each organisation's forwarding address, 128 random bits. The sender check is a second factor, because `From` headers are easy to forge.
+- Each organisation's forwarding address is its name plus a short random code, such as `stmarysgaa-7kq4m2@…`, so people can recognise it. It's one of two locks: the email must also come from a member's own address and pass SPF or DKIM, because `From` headers are easy to forge. A wrong guess gets the same reply as a right one, so trying addresses reveals nothing.
 - Attachments are checked by their actual bytes, not their file extension, and decoded only as JPEG, PNG, GIF or WebP.
 - Each attachment becomes a draft in a separate table, never a live expense, until a person confirms it.
 
